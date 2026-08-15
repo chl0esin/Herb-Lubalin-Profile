@@ -1,0 +1,2203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Herb Lubalin — An Exhibition in Type</title>
+
+<!-- Fonts: Avant Garde placeholder below via @font-face. Web fallbacks approximate the geometric/editorial feel. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ============================================================
+   HERB LUBALIN — TYPE EXHIBITION
+   -----------------------------------------------------------
+   Palette
+   --ink      #0A0A08   near-black, primary text/bg
+   --bone     #F1EBDD   warm paper cream
+   --lubred   #D3401F   Avant Garde masthead red
+   --ochre    #E3A73B   mustard accent
+   --teal     #16403E   deep editorial teal
+   --grey     #7A7263   warm neutral grey
+   ============================================================ */
+
+:root{
+  --ink:#0A0A08;
+  --bone:#F1EBDD;
+  --lubred:#D3401F;
+  --ochre:#E3A73B;
+  --teal:#16403E;
+  --grey:#7A7263;
+
+  --display: 'Avant Garde Placeholder', 'Poppins', sans-serif;
+  --serif: 'Fraunces', Georgia, serif;
+  --mono: 'Space Mono', monospace;
+}
+
+/* Placeholder @font-face — replace src with licensed ITC Avant Garde Gothic files */
+@font-face{
+  font-family:'Avant Garde Placeholder';
+  src: local('Avant Garde Gothic'), local('AvantGarde-Book');
+  font-weight: 300 900;
+  font-display: swap;
+}
+
+/* ------------------------------------------------------------------
+   TO ADD THE REAL LICENSED TYPEFACES (Typefaces section, "The Type
+   He Left Behind"):
+
+   1. Get the variable-font file (.woff2, usually) for each typeface
+      from wherever you licensed it.
+   2. Uncomment ONE of the five @font-face blocks below and fix its
+      src: url('...') to point at your actual file.
+   3. Scroll down to the matching .font-big[data-font="..."] rule
+      (search this stylesheet for font-big[data-font) and uncomment
+      the two lines inside it — that's what actually applies the
+      font to the big display text in that row.
+   4. Repeat for any of the other four you have files for. Leave the
+      rest commented out and they'll keep using the plain fallback.
+
+   font-variation-settings is where you pick a specific weight/width
+   out of the variable font's range, e.g. 'wght' 700 for a bold
+   instance. Adjust the numbers to whatever the file's axes support.
+   ------------------------------------------------------------------ */
+
+@font-face {
+    font-family: "LC Hairline";
+    src: url("./font/l&chairline.ttf") format("truetype");
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face{
+  font-family:'ITC Avant Garde Gothic Book';
+  src:url('/font/avantgarde-book.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face{
+  font-family:'ITC Ronda';
+  src:url('/font/itc-ronda.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face{
+  font-family:'ITC Lubalin Graph';
+  src:url('/font/Lubalin-Graph-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face{
+  font-family:'ITC Serif Gothic';
+  src:url('/font/serifgothicbold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+
+html,body{
+  margin:0; padding:0;
+  background:var(--bone);
+  color:var(--ink);
+  font-family:var(--serif);
+  overflow-x:hidden;
+  width:100%;
+}
+
+::selection{ background:var(--lubred); color:var(--bone); }
+
+img{ max-width:100%; display:block; }
+
+a{ color:inherit; text-decoration:none; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+}
+
+/* ---------- utility ---------- */
+.eyebrow{
+  font-family:var(--mono);
+  font-size:0.72rem;
+  letter-spacing:0.32em;
+  text-transform:uppercase;
+  color:var(--lubred);
+}
+.wrap{ position:relative; max-width:1500px; margin:0 auto; padding:0 6vw; }
+.reveal{ opacity:0; transform:translateY(40px); transition:opacity 0.9s cubic-bezier(.16,.84,.44,1), transform 0.9s cubic-bezier(.16,.84,.44,1); }
+.reveal.in{ opacity:1; transform:translateY(0); }
+.reveal-scale{ opacity:0; transform:scale(0.86); transition:opacity 1s cubic-bezier(.16,.84,.44,1), transform 1s cubic-bezier(.16,.84,.44,1); }
+.reveal-scale.in{ opacity:1; transform:scale(1); }
+.reveal-side{ opacity:0; transform:translateX(-60px); transition:opacity 0.9s cubic-bezier(.16,.84,.44,1), transform 0.9s cubic-bezier(.16,.84,.44,1); }
+.reveal-side.in{ opacity:1; transform:translateX(0); }
+
+/* stagger children of .stagger via inline transition-delay set by JS */
+.letters span{ display:inline-block; opacity:0; transform:translateY(0.6em) rotate(4deg); transition:opacity 0.6s ease, transform 0.6s cubic-bezier(.2,.9,.3,1); }
+.letters.in span{ opacity:1; transform:translateY(0) rotate(0deg); }
+
+/* ============================================================ NAV */
+nav.exhibit-nav{
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1.1rem 6vw;
+  mix-blend-mode:difference;
+  color:#fff;
+  font-family:var(--mono);
+  font-size:0.68rem;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  pointer-events:none;
+}
+nav.exhibit-nav *{ pointer-events:auto; }
+.nav-mark{ font-weight:700; font-family:var(--display); font-size:1rem; letter-spacing:0.02em; }
+.nav-links{ display:flex; gap:1.6rem; align-items:center; }
+.nav-links a{ position:relative; opacity:0.55; transition:opacity .3s; }
+.nav-links a.active,.nav-links a:hover{ opacity:1; }
+.nav-links a.active::after{ content:''; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:currentColor; }
+.nav-links a span.dot{ display:none; }
+
+.bulb-btn{
+  width:38px; height:38px; border-radius:50%;
+  border:1.5px solid currentColor;
+  background:transparent;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  position:relative;
+  color:#fff;
+  transition: background .35s, color .35s, transform .3s;
+}
+.bulb-btn:hover{ transform:rotate(-8deg) scale(1.05); }
+.bulb-btn svg{ width:18px; height:18px; }
+.bulb-btn.active{ background:#fff; color:#000; }
+
+.bulb-tip{
+  position:absolute; top:120%; right:0;
+  width:250px;
+  background:var(--ink); color:var(--bone);
+  font-family:var(--mono); font-size:0.68rem; line-height:1.55;
+  letter-spacing:0.02em; text-transform:none;
+  padding:0.9rem 1rem;
+  opacity:0; visibility:hidden; transform:translateY(-6px);
+  transition:opacity .25s, transform .25s, visibility .25s;
+}
+.bulb-btn:hover .bulb-tip, .bulb-btn:focus .bulb-tip{ opacity:1; visibility:visible; transform:translateY(0); }
+
+/* colour-blind simulation filter target */
+.cb-active{ filter:url(#protanopia-filter); }
+body.cb-transition, body.cb-transition *{ transition: filter 1.1s ease !important; }
+
+/* ============================================================ HERO */
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:9rem 6vw 5rem;
+  overflow:hidden;
+}
+.hero-eyebrow{ margin-bottom:1.4rem; }
+
+/* ---- hero title stage: your custom title / hover video / end frame ----
+   This is the empty space. Point the <img>/<video> src attributes in the
+   HTML below at your own files (or wire up window.storage / a CMS later).
+   ------------------------------------------------------------------- */
+.hero-title-stage{
+  position:relative;
+  width:100%;
+  max-width:1600px;
+  aspect-ratio: 1200/600; /* landscape, matches a 1200×600 asset */
+  margin-top:2.4rem;
+  margin-left:auto;
+  margin-right:auto;
+  max-height:70vh; /* safety cap so it doesn't overflow the viewport on tall/narrow screens */
+  cursor:pointer;
+  background:transparent;
+}
+.hts-layer{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:contain;   /* use 'cover' if your images/video should fill/crop */
+  object-position:left center;
+  opacity:0;
+  pointer-events:none;
+}
+/* default state: title image showing */
+.hero-title-stage .hts-title{ opacity:1; }
+/* hover / playing state: video showing, instant swap (no fade) */
+.hero-title-stage.is-playing .hts-title{ opacity:0; }
+.hero-title-stage.is-playing .hts-video{ opacity:1; }
+/* ended state: swapped to the second title image, stays put (also instant) */
+.hero-title-stage.is-done .hts-title{ opacity:0; }
+.hero-title-stage.is-done .hts-video{ opacity:0; }
+.hero-title-stage.is-done .hts-end{ opacity:1; }
+
+.hero-scroll{
+  position:absolute; bottom:2.4rem; left:6vw;
+  font-family:var(--mono); font-size:0.68rem; letter-spacing:0.2em; text-transform:uppercase;
+  display:flex; align-items:center; gap:0.6rem; color:var(--grey);
+}
+.hero-scroll .bar{ width:1px; height:34px; background:var(--grey); position:relative; overflow:hidden; }
+.hero-scroll .bar::after{ content:''; position:absolute; top:-100%; left:0; right:0; height:100%; background:var(--lubred); animation:scrollbar 1.8s ease-in-out infinite; }
+@keyframes scrollbar{ 0%{ top:-100%;} 50%{ top:0;} 100%{ top:100%;} }
+
+/* ============================================================ SECTION SHARED */
+section{ position:relative; padding:9rem 0; }
+.section-head{ margin-bottom:5rem; }
+.section-title{
+  font-family:var(--display); font-weight:800; text-transform:uppercase;
+  font-size:clamp(2.6rem, 7vw, 6rem); line-height:0.92; letter-spacing:-0.01em; margin:0.4rem 0 0;
+}
+
+/* ============================================================ WHO WAS HE — timeline */
+.who{ background:var(--ink); color:var(--bone); }
+.who .eyebrow{ color:var(--ochre); }
+.timeline{ position:relative; margin-top:5rem; padding-left:0; }
+.timeline-track{ position:relative; border-left:1px solid rgba(241,235,221,0.25); margin-left:2vw; }
+.tl-item{
+  position:relative; padding:2.6rem 0 2.6rem 3.2rem;
+  border-bottom:1px solid rgba(241,235,221,0.12);
+}
+.tl-item:last-child{ border-bottom:none; }
+.tl-dot{
+  position:absolute; left:-5px; top:3rem; width:9px; height:9px; border-radius:50%;
+  background:var(--lubred); cursor:pointer; z-index:5;
+}
+.tl-dot::before{ content:''; position:absolute; inset:-11px; } /* larger, invisible hover target */
+.tl-dot-pop{
+  position:absolute; left:calc(100% + 14px); top:50%;
+  transform:translateY(-50%) scale(0.94);
+  width:200px; aspect-ratio:4/3;
+  background:linear-gradient(135deg,#1c1c18,#050504);
+  border:1px solid rgba(241,235,221,0.18);
+  box-shadow:0 16px 34px -12px rgba(10,10,8,0.6);
+  overflow:hidden;
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity .28s ease, transform .28s ease, visibility .28s ease;
+  z-index:30;
+}
+.tl-dot-pop::after{
+  content:''; position:absolute; left:-6px; top:50%; transform:translateY(-50%);
+  width:0; height:0; border-style:solid; border-width:6px 6px 6px 0;
+  border-color:transparent rgba(241,235,221,0.18) transparent transparent;
+}
+.tl-dot-pop img{ width:100%; height:100%; object-fit:cover; display:none; pointer-events:none; }
+.tl-dot-pop.has-image img{ display:block; }
+.tl-dot-pop-placeholder{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:0.56rem; letter-spacing:0.06em; text-transform:uppercase;
+  color:rgba(241,235,221,0.4); text-align:center; padding:0.4rem;
+}
+.tl-dot-pop.has-image .tl-dot-pop-placeholder{ display:none; }
+.tl-dot:hover .tl-dot-pop, .tl-dot:focus-within .tl-dot-pop{
+  opacity:1; visibility:visible; transform:translateY(-50%) scale(1);
+}
+.tl-year{
+  font-family:var(--display); font-weight:800; font-size:clamp(2.2rem,6vw,4.2rem);
+  line-height:1; display:inline-block; margin-right:1.6rem;
+  transition: color .3s;
+}
+.tl-item:hover .tl-year{ color:var(--ochre); }
+.tl-text{ font-family:var(--mono); font-size:0.8rem; letter-spacing:0.02em; color:rgba(241,235,221,0.75); display:inline-block; max-width:420px; vertical-align:middle; }
+.tl-item{ cursor:pointer; }
+
+
+/* ---- who: two-column layout. Right column is an invisible drag
+   playground the same height as the timeline (top edge lines up with
+   the 1918 row, bottom edge with the 1981 row) holding 4 draggable
+   photo tiles. The zone itself has no background/border — it's a
+   boundary, not a visible box. ---- */
+.who-body{ display:grid; grid-template-columns:1fr 480px; gap:4rem; margin-top:3.5rem; }
+.who-drag-zone{
+  position:relative;
+  width:100%;
+  height:100%;
+  min-height:630px; /* floor for mobile / before layout settles */
+}
+.who-drag-item{
+  position:absolute;
+  width:225px;
+  aspect-ratio:4/5;
+  cursor:grab;
+  touch-action:none;
+  -webkit-user-select:none; user-select:none;
+  background:transparent;
+  border:none;
+  box-shadow:none;
+  transform:rotate(var(--rot, 0deg));
+  transition:transform .15s ease;
+  overflow:hidden;
+}
+/* before a real photo is dropped in, show a faint placeholder box so the
+   tile is still visible/usable; once .has-image is added, this drops
+   away entirely and only the image itself remains */
+.who-drag-item:not(.has-image){
+  background:linear-gradient(135deg,#1c1c18,#050504);
+  border:1px dashed rgba(241,235,221,0.18);
+}
+.who-drag-item.dragging{
+  cursor:grabbing;
+  transform:rotate(0deg) scale(1.05);
+  transition:none;
+  z-index:100;
+}
+/* small colour corner-tag only shows on the placeholder tiles, before a
+   real photo is in place — it disappears once .has-image is added */
+.who-drag-item:not(.has-image)::before{
+  content:''; position:absolute; top:0; right:0; width:20px; height:20px;
+  background:var(--lubred); clip-path:polygon(100% 0, 0 0, 100% 100%); z-index:2;
+}
+.who-drag-item img{
+  width:100%; height:100%; object-fit:cover; display:none;
+  pointer-events:none; -webkit-user-drag:none;
+}
+.who-drag-item.has-image img{ display:block; }
+.who-drag-placeholder{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  gap:0.4rem; text-align:center; padding:0.9rem;
+  font-family:var(--mono); font-size:0.58rem; letter-spacing:0.06em; text-transform:uppercase;
+  color:rgba(241,235,221,0.4);
+}
+.who-drag-item.has-image .who-drag-placeholder{ display:none; }
+@media (max-width:860px){
+  .who-body{ grid-template-columns:1fr; }
+  .who-drag-zone{ min-height:60vh; margin-bottom:1rem; }
+}
+
+
+/* ============================================================ WHY HE CHANGED TYPOGRAPHY
+   A justified flow of bold caps + plain rectangle placeholders, edge
+   to edge like a Lubalin editorial spread. Every keyword sits at one
+   flat color until hovered; hovering opens a description panel right
+   under its own line, pushing everything below it down.
+   ============================================================ */
+.why{ background:var(--bone); overflow:hidden; }
+
+.why-main .eyebrow{ display:block; margin-bottom:1.6rem; }
+
+.why-flow{ display:flex; flex-direction:column; margin-top:0.4rem; }
+
+/* one line of the composition: words + rectangles, edge to edge, balanced */
+.why-row{
+  display:flex;
+  align-items:stretch;
+  gap:1.4rem;
+  width:100%;
+  padding:0.55rem 0;
+}
+.why-row.heading{ padding-top:0; align-items:center; }
+
+.why-title{
+  font-family:var(--display); font-weight:800; text-transform:uppercase;
+  font-size:clamp(2rem, 6.2vw, 4.4rem);
+  line-height:0.9; letter-spacing:-0.02em;
+  color:var(--ink);
+  width:100%;
+}
+
+.why-word{
+  font-family:var(--display); font-weight:800; text-transform:uppercase;
+  font-size:clamp(1.7rem, 5.4vw, 3.6rem);
+  line-height:0.9; letter-spacing:-0.02em;
+  color:var(--ink);
+  white-space:nowrap;
+  flex:0 0 auto;
+  align-self:center;
+  cursor:pointer;
+  transition:color .3s ease;
+}
+.why-word:hover, .why-word.active{ color:var(--lubred); }
+
+/* rectangle placeholders — grow to fill the line edge to edge, styled
+   as a solid block (not a hairline), swap the background for a real
+   image/video later */
+.why-box{
+  flex:1 1 0%;
+  align-self:stretch;
+  min-height:2.6rem;
+  background:#cbbfa1;
+  border:1px solid rgba(10,10,8,0.18);
+}
+.why-box.fixed{ flex:0 0 5.6em; }
+
+/* expandable description panel — sits directly under its row, pushes
+   the rows below it down as it opens (normal document flow, no absolute
+   positioning) */
+.why-panel{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .8s cubic-bezier(.2,.9,.3,1);
+}
+.why-panel.open{ max-height:34rem; }
+.why-panel-inner{
+  display:flex; gap:2.4rem; align-items:flex-start;
+  padding:1.8rem 0 2rem;
+  border-top:1px solid rgba(10,10,8,0.15);
+  border-bottom:1px solid rgba(10,10,8,0.15);
+  margin-top:0.2rem;
+  opacity:0;
+  transition:opacity .5s ease;
+}
+.why-panel.open .why-panel-inner{ opacity:1; transition:opacity .6s ease .2s; }
+.why-panel-frame{
+  flex:0 0 auto;
+  width:min(42vw, 380px);
+  aspect-ratio:4/3;
+  background:linear-gradient(135deg,#e4dcc8,#c9bf9e);
+  border:1px solid rgba(10,10,8,0.12);
+  box-shadow:0 14px 30px -14px rgba(10,10,8,0.35);
+}
+.why-panel-frame img{ width:100%; height:100%; object-fit:cover; display:none; }
+.why-panel-text{ flex:1 1 auto; min-width:0; }
+.why-panel-text h4{
+  font-family:var(--display); font-weight:800; text-transform:uppercase;
+  font-size:1.3rem; letter-spacing:-0.01em; margin:0 0 0.8rem;
+  color:var(--ink);
+}
+.why-panel-text p{
+  font-family:var(--serif); font-size:0.96rem; line-height:1.65; color:var(--grey); margin:0 0 0.9rem;
+  max-width:58ch;
+}
+.why-panel-text p:last-child{ margin-bottom:0; }
+
+@media (max-width:720px){
+  .why-row{ flex-wrap:wrap; gap:0.8rem; }
+  .why-box{ flex:1 1 40px; min-height:1.8rem; }
+  .why-panel-inner{ flex-direction:column; }
+  .why-panel-frame{ width:100%; }
+  .why-panel.open{ max-height:44rem; }
+}
+
+/* ============================================================ FONTS */
+.fonts{ background:var(--ink); color:var(--bone); }
+.font-spec{
+  border-top:1px solid rgba(241,235,221,0.2);
+  padding:3.4rem 0;
+  display:grid; grid-template-columns: 1.1fr 1.8fr; gap:3rem; align-items:center;
+}
+.font-spec:last-of-type{ border-bottom:1px solid rgba(241,235,221,0.2); }
+.font-spec .fname{ font-family:var(--mono); font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--ochre); }
+.font-spec .fdesc{ font-family:var(--serif); font-size:0.95rem; color:rgba(241,235,221,0.7); max-width:340px; margin-top:0.6rem; }
+.font-big{
+  font-weight:800; text-transform:uppercase;
+  font-size:clamp(3rem,8vw,7.4rem); line-height:0.9; letter-spacing:-0.01em;
+  cursor:default;
+  transition: transform .5s cubic-bezier(.2,.9,.3,1), letter-spacing .5s;
+}
+/* Fallback styling per typeface, since the real ITC/L&C files aren't
+   bundled here. Each rule below has a commented-out line right after
+   it — once you've registered the matching @font-face near the top
+   of this stylesheet, uncomment that line (and delete or comment out
+   the fallback font-family above it) to switch that row over to the
+   real font. */
+
+.font-big[data-font="hairline"] {
+    font-family: "LC Hairline", sans-serif;
+    font-weight: 100;
+    font-style: normal;
+    letter-spacing: 0.015em;
+    text-transform: none;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.font-big[data-font="avantgarde"]{
+    font-family:'ITC Avant Garde Gothic Book', 'Poppins', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0.015em;
+    text-transform: none;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.font-big[data-font="ronda"]{
+    font-family:'ITC Ronda', 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.font-big[data-font="lubalingraph"]{
+  font-family:'ITC Lubalin Graph', 'Rockwell', Georgia, serif;
+  font-weight: 400;
+}
+
+.font-big[data-font="serifgothic"]{
+  font-family:'ITC Serif Gothic', Georgia, serif;
+  font-weight: 700;
+}
+
+.font-spec:hover .font-big{ transform:skewX(-4deg) scale(1.03); letter-spacing:0.01em; color:var(--lubred); }
+
+/* ============================================================ WORK GALLERY */
+.gallery{ background:var(--bone); }
+.gallery-head{
+  display:flex; align-items:flex-end; justify-content:space-between;
+  gap:2rem; flex-wrap:wrap;
+}
+.g-toggle{
+  display:flex; align-items:center; gap:0.7rem;
+  background:transparent;
+  border:1px solid rgba(10,10,8,0.25);
+  border-radius:999px;
+  padding:0.6rem 1.2rem;
+  cursor:pointer;
+  font-family:var(--mono); font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--ink);
+  transition:border-color .3s ease, background .3s ease, color .3s ease;
+  flex:0 0 auto;
+  position:relative;
+}
+.g-toggle:hover{ border-color:var(--ink); }
+.g-toggle.active{ background:var(--ink); color:var(--bone); border-color:var(--ink); }
+.g-toggle-dot{ width:7px; height:7px; border-radius:50%; background:var(--grey); transition:background .3s ease; flex:0 0 auto; }
+.g-toggle.active .g-toggle-dot{ background:var(--lubred); }
+
+.g-toggle-tip{
+  position:absolute; top:120%; right:0;
+  width:270px;
+  background:var(--ink); color:var(--bone);
+  font-family:var(--mono); font-size:0.68rem; line-height:1.6;
+  letter-spacing:0.02em; text-transform:none;
+  padding:0.9rem 1rem;
+  text-align:left;
+  opacity:0; visibility:hidden; transform:translateY(-6px);
+  transition:opacity .25s, transform .25s, visibility .25s;
+  z-index:5;
+}
+.g-toggle:hover .g-toggle-tip, .g-toggle:focus .g-toggle-tip{ opacity:1; visibility:visible; transform:translateY(0); }
+
+/* immersive mode: captions fade out, pictures stand alone like an exhibit wall.
+   Off by default — only kicks in once the visitor deliberately toggles it. */
+.gallery.g-immersive .g-caption{ opacity:0; pointer-events:none; }
+
+.gallery-grid{ display:flex; flex-direction:column; gap:8rem; margin-top:4rem; }
+.g-item{ display:grid; grid-template-columns: 1fr 1fr; gap:3rem; align-items:center; }
+.g-item.flip{ direction:rtl; }
+.g-item.flip > *{ direction:ltr; }
+.g-frame{
+  position:relative; width:100%; aspect-ratio: 1/1;
+  background:linear-gradient(135deg,#e4dcc8,#c9bf9e);
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  color:var(--grey); font-family:var(--mono); font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase;
+  padding:1.4rem;
+  border:1px solid rgba(10,10,8,0.12);
+  overflow:hidden;
+}
+.g-frame::before{
+  content:''; position:absolute; top:0.7rem; left:0.7rem;
+  width:14px; height:14px; border-top:1.5px solid rgba(10,10,8,0.3); border-left:1.5px solid rgba(10,10,8,0.3);
+}
+.g-frame::after{
+  content:''; position:absolute; bottom:0.7rem; right:0.7rem;
+  width:14px; height:14px; border-bottom:1.5px solid rgba(10,10,8,0.3); border-right:1.5px solid rgba(10,10,8,0.3);
+}
+.g-frame img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+.g-caption .eyebrow{ display:block; margin-bottom:0.8rem; }
+.g-caption h3{ font-family:var(--display); font-weight:800; text-transform:uppercase; font-size:clamp(1.6rem,3.4vw,2.6rem); margin:0 0 0.8rem; line-height:1; }
+.g-caption p{ font-family:var(--serif); font-size:0.95rem; color:var(--grey); max-width:360px; margin:0; }
+
+/* ============================================================ TYPOGRAPHY ANALYSIS */
+.tanalysis{ background:var(--ink); color:var(--bone); }
+.ta-stage{ position:relative; margin-top:4rem; }
+.ta-word{
+  font-family:'Poppins',sans-serif; font-weight:800; text-transform:uppercase;
+  font-size:clamp(3rem,11vw,10rem); line-height:0.85; text-align:center; letter-spacing:-0.02em;
+  position:relative; user-select:none;
+  padding:1.5rem 0 3.5rem;
+}
+.ta-word .lg{ position:relative; display:inline-block; }
+.hotspot{
+  position:absolute; width:30px; height:30px; border-radius:50%;
+  background:var(--lubred); border:2px solid var(--ink);
+  cursor:pointer; transform:translate(-50%,-50%);
+  display:flex; align-items:center; justify-content:center;
+  z-index:6;
+  box-shadow:0 0 0 3px var(--ink);
+  transition: background .25s, transform .25s;
+}
+.hotspot .hs-num{ font-family:var(--mono); font-weight:700; font-size:0.72rem; color:var(--bone); }
+.hotspot:hover, .hotspot.active{ background:var(--ochre); transform:translate(-50%,-50%) scale(1.14); }
+
+.ta-notes{
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:1.4rem;
+  max-width:920px; margin:0 auto;
+}
+.ta-note{
+  border:1px solid rgba(241,235,221,0.18);
+  padding:1.6rem 1.5rem;
+  cursor:pointer;
+  transition: border-color .25s, background .25s;
+}
+.ta-note .tag{
+  display:flex; align-items:center; gap:0.5rem;
+  font-family:var(--mono); font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--lubred); margin-bottom:0.7rem; transition:color .25s;
+}
+.ta-note .tag .tag-num{
+  width:18px; height:18px; border-radius:50%; border:1px solid currentColor;
+  display:inline-flex; align-items:center; justify-content:center; font-size:0.62rem;
+}
+.ta-note p{ margin:0; font-family:var(--mono); font-size:0.76rem; line-height:1.7; color:rgba(241,235,221,0.68); transition:color .25s; }
+.ta-note.active{ border-color:var(--ochre); background:rgba(227,167,59,0.08); }
+.ta-note.active .tag{ color:var(--ochre); }
+.ta-note.active p{ color:rgba(241,235,221,0.92); }
+
+/* ============================================================ CASE STUDY: MOTHER & CHILD
+   The logotype gets its own black plate, the way it would sit in a
+   monograph: the wordmark floats large on black with a handful of
+   fixed gold markers over it. Hovering (or tapping, on touch) a
+   marker swaps a single readout — a big rotated word plus a short
+   paragraph — bottom right, rather than opening a card or a list.
+   ============================================================ */
+.mchild{ background:var(--ink); color:var(--bone); overflow:hidden; padding-top:3.5rem; }
+.mchild .section-head{ margin-bottom:2.6rem; }
+.mc-amp{ color:var(--ochre); margin:0 0.02em; }
+
+.mc-intro{
+  max-width:640px; font-family:var(--mono); font-size:0.82rem; line-height:1.75;
+  color:rgba(241,235,221,0.65); margin:0 0 4.5rem;
+}
+
+.mc-stage{ position:relative; }
+
+.mc-frame{
+  position:relative; width:100%; max-width:980px;
+  min-height:260px; aspect-ratio:16/7;
+  background:transparent; border:none;
+  display:flex; align-items:center; justify-content:flex-start;
+}
+.mc-frame:not(.has-image){
+  border:1px dashed rgba(241,235,221,0.22);
+  background:rgba(241,235,221,0.02);
+}
+
+.mc-placeholder{
+  display:flex; flex-direction:column; align-items:center; gap:0.9rem;
+  text-align:center; color:rgba(241,235,221,0.45); font-family:var(--mono);
+  font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase;
+  width:100%; padding:2rem; pointer-events:none;
+}
+.mc-placeholder-icon{
+  width:42px; height:42px; border:1.5px dashed rgba(241,235,221,0.4); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--serif); font-size:1.5rem; font-weight:500; color:rgba(241,235,221,0.6);
+}
+.mc-frame.has-image .mc-placeholder{ display:none; }
+
+.mc-img{ position:relative; display:none; width:100%; max-width:100%; height:auto; }
+
+.mc-hotspots{ position:absolute; inset:0; pointer-events:none; }
+
+/* fixed gold markers — hover/focus-driven, not draggable */
+.mc-dot{
+  position:absolute; width:14px; height:14px; border-radius:50%;
+  background:var(--ochre); border:2px solid var(--bone);
+  transform:translate(-50%,-50%); padding:0; cursor:pointer;
+  pointer-events:auto; box-shadow:0 0 0 0 rgba(227,167,59,0);
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.mc-dot:hover, .mc-dot:focus-visible, .mc-dot.active{
+  transform:translate(-50%,-50%) scale(1.3);
+  box-shadow:0 0 0 7px rgba(227,167,59,0.16);
+}
+.mc-dot:focus-visible{ outline:none; }
+
+.mc-readout{
+  display:flex; align-items:flex-start; gap:1.8rem;
+  margin:5rem 0 0 auto; max-width:400px; justify-content:flex-end;
+  text-align:left;
+}
+.mc-readout-word{
+  writing-mode:vertical-rl; transform:rotate(180deg);
+  font-family:var(--display); font-weight:800; text-transform:uppercase;
+  font-size:clamp(2.1rem,5.4vw,3.6rem); line-height:0.85; letter-spacing:-0.01em;
+  color:var(--bone); white-space:nowrap; flex-shrink:0;
+  transition:opacity .18s ease;
+}
+/* the paragraphs stretch, via JS-matched min-height, to span the exact
+   vertical range of the word beside them — top edge to top edge,
+   bottom edge to bottom edge — with space-between doing the fill */
+.mc-readout-text{
+  display:flex; flex-direction:column; justify-content:space-between;
+  font-family:var(--mono); font-size:0.78rem; line-height:1.65;
+  color:rgba(241,235,221,0.65); margin:0; min-width:0;
+  transition:opacity .18s ease;
+}
+.mc-readout-text p{ margin:0 0 0.9rem; }
+.mc-readout-text p:last-child{ margin-bottom:0; }
+@media (max-width:640px){
+  .mc-readout{ margin-left:0; max-width:100%; }
+  .mc-readout-word{ font-size:2rem; }
+  .mc-readout-text{ min-height:0 !important; }
+}
+
+/* ============================================================ LOGOTYPE WORKSHOP
+   Lubalin never used off-the-shelf type for a logotype — every letter
+   was custom-drawn: slanted, re-weighted, and pulled close enough to
+   its neighbor to share a stroke. This lets you do the same, letter
+   by letter.
+   ============================================================ */
+.ligature-lab{ background:var(--bone); }
+.ll-intro{
+  max-width:600px; margin:0 0 3.4rem;
+  font-family:var(--mono); font-size:0.85rem; line-height:1.85; color:var(--grey);
+}
+.ll-stage{
+  min-height:280px; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(160deg,#efe7d4,#d9cfb4);
+  border:1px solid rgba(10,10,8,0.15);
+  padding:3.2rem 1.5rem;
+  overflow:hidden;
+}
+.ll-word{
+  display:flex; align-items:baseline; justify-content:center;
+  font-family:var(--display); text-transform:uppercase;
+  font-size:clamp(2.1rem,10.5vw,5.6rem); line-height:0.86; white-space:nowrap;
+  color:var(--ink);
+}
+.wl-letter{
+  display:inline-block;
+  position:relative;
+  cursor:pointer;
+  transition:margin-left .25s ease, color .3s ease, transform .25s ease;
+}
+.wl-letter.wl-space{ width:0.5em; cursor:default; }
+.wl-letter.selected::before{
+  content:'';
+  position:absolute; inset:-0.1em -0.08em;
+  border:1.5px dashed var(--lubred);
+  pointer-events:none;
+}
+
+/* ---- editing panel for the selected letter ---- */
+.wl-panel{
+  max-width:600px; margin:2.4rem auto 0;
+  border:1px solid rgba(10,10,8,0.18);
+  padding:1.6rem 1.8rem 1.8rem;
+  display:flex; flex-direction:column; gap:1.3rem;
+}
+.wl-panel-row{ display:flex; align-items:baseline; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+.wl-panel-label{
+  font-family:var(--display); font-weight:800; text-transform:uppercase; letter-spacing:-0.01em;
+  font-size:1.05rem; color:var(--ink);
+}
+.wl-panel-label span{ color:var(--lubred); }
+.wl-panel-desc{
+  font-family:var(--mono); font-size:0.72rem; letter-spacing:0.02em; color:var(--grey);
+}
+.wl-control{ display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+.wl-control-label{
+  flex:0 0 5.2rem;
+  font-family:var(--mono); font-size:0.66rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--grey);
+}
+.wl-control input[type=range]{ flex:1 1 auto; min-width:140px; accent-color:var(--lubred); }
+.wl-btn-row{ display:flex; gap:0.5rem; flex-wrap:wrap; }
+.wl-btn-row button{
+  font-family:var(--mono); font-size:0.66rem; letter-spacing:0.06em; text-transform:uppercase;
+  background:none; border:1px solid var(--grey); color:var(--grey);
+  padding:0.4rem 0.8rem; cursor:pointer; transition:.25s;
+}
+.wl-btn-row button.active, .wl-btn-row button:hover{ border-color:var(--ink); color:var(--ink); }
+.wl-swatch{ width:14px; height:14px; border-radius:50%; display:inline-block; margin-right:0.4rem; vertical-align:-2px; }
+.wl-btn-row button[disabled]{ opacity:0.35; cursor:not-allowed; pointer-events:none; }
+.wl-control input[type=range][disabled]{ opacity:0.35; cursor:not-allowed; }
+
+/* ---- word input + remix/reset ---- */
+.wl-actions{
+  max-width:600px; margin:2rem auto 0;
+  display:flex; align-items:flex-end; gap:1.4rem; flex-wrap:wrap;
+}
+.ll-input-wrap{ flex:1 1 220px; }
+.ll-input-label{
+  display:block; margin-bottom:0.5rem;
+  font-family:var(--mono); font-size:0.66rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--grey);
+}
+.ll-input-wrap input[type=text]{
+  width:100%; background:transparent; border:none; border-bottom:1.5px solid rgba(10,10,8,0.3);
+  font-family:var(--display); font-weight:800; text-transform:uppercase;
+  font-size:1.3rem; letter-spacing:0.01em; color:var(--ink);
+  padding:0.4rem 0.1rem; transition:border-color .3s ease;
+}
+.ll-input-wrap input[type=text]:focus{ outline:none; border-color:var(--lubred); }
+.wl-action-btns{ display:flex; gap:0.7rem; flex:0 0 auto; }
+.wl-action{
+  font-family:var(--mono); font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase;
+  padding:0.7rem 1.2rem; cursor:pointer; transition:.25s;
+  border:1px solid var(--ink); background:transparent; color:var(--ink);
+}
+.wl-action:hover{ background:var(--ink); color:var(--bone); }
+.wl-action.primary{ background:var(--lubred); border-color:var(--lubred); color:var(--bone); }
+.wl-action.primary:hover{ background:var(--ink); border-color:var(--ink); }
+
+.ll-words{ display:flex; gap:0.8rem; justify-content:center; margin-top:2.4rem; flex-wrap:wrap; }
+.ll-words button{
+  font-family:var(--mono); font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase;
+  background:none; border:1px solid var(--grey); color:var(--grey);
+  padding:0.55rem 1rem; cursor:pointer; transition:.25s;
+}
+.ll-words button.active, .ll-words button:hover{ border-color:var(--ink); color:var(--ink); }
+
+@media (max-width:640px){
+  .wl-control-label{ flex-basis:100%; }
+}
+
+/* ============================================================ INFLUENCE */
+.influence{ background:var(--ink); color:var(--bone); text-align:center; }
+.influence-names{ margin-top:4rem; display:flex; flex-wrap:wrap; justify-content:center; gap:0.6em 1em; }
+.influence-names span{
+  font-family:var(--display); font-weight:800; text-transform:uppercase;
+  font-size:clamp(1.6rem,4.6vw,3.4rem); line-height:1.1;
+  color:rgba(241,235,221,0.28);
+  transition: color .4s, transform .4s;
+  cursor:default;
+}
+.influence-names span:hover{ color:var(--ochre); transform:translateY(-4px); }
+.influence-names span.inf-name.active{ color:var(--ochre); transform:translateY(-4px); }
+.influence-sub{ margin-top:3rem; font-family:var(--mono); font-size:0.78rem; color:var(--grey); max-width:480px; margin-inline:auto; }
+
+.inf-panel{
+  max-width:640px; margin:0 auto 0; min-height:0;
+  max-height:0; overflow:hidden; opacity:0;
+  transition:max-height .6s cubic-bezier(.2,.9,.3,1), opacity .4s ease, margin-top .4s ease;
+}
+.inf-panel.open{ max-height:14rem; opacity:1; margin-top:2.6rem; }
+.inf-panel-inner{ border-top:1px solid rgba(241,235,221,0.18); padding-top:1.6rem; }
+.inf-panel-text{
+  font-family:var(--serif); font-style:italic; font-size:1.05rem; line-height:1.65;
+  color:var(--bone); margin:0 0 0.9rem;
+}
+.inf-panel-work{
+  display:block; font-family:var(--mono); font-size:0.68rem; letter-spacing:0.09em;
+  text-transform:uppercase; color:var(--ochre);
+}
+
+/* ============================================================ ENDING WALL */
+.ending{ background:var(--ink); color:var(--bone); padding:8rem 0 0; overflow:hidden; }
+.ending-title{
+  text-align:center; font-family:var(--display); font-weight:800; text-transform:uppercase;
+  font-size:clamp(2.6rem,9vw,8rem); letter-spacing:-0.01em; line-height:0.9; margin:0 0 4rem;
+}
+.ending-title .accent{ color:var(--lubred); }
+.wall{ display:flex; flex-direction:column; gap:1.4rem; padding-bottom:6rem; }
+.marquee-row{ display:flex; width:max-content; gap:1.4rem; will-change:transform; }
+.marquee-row.left{ animation: marquee-left 38s linear infinite; }
+.marquee-row.right{ animation: marquee-right 44s linear infinite; }
+.marquee-row.slow{ animation-duration:60s; }
+@keyframes marquee-left{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+@keyframes marquee-right{ from{ transform:translateX(-50%);} to{ transform:translateX(0);} }
+.wall-card{
+  position:relative;
+  flex:0 0 auto; width:260px; aspect-ratio:4/3;
+  background:linear-gradient(145deg,#2a2620,#171410);
+  border:1px solid rgba(241,235,221,0.15);
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  color:rgba(241,235,221,0.55); font-family:var(--mono); font-size:0.66rem; letter-spacing:0.06em; text-transform:uppercase;
+  padding:1rem;
+  overflow:hidden;
+}
+.wall-card img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.wall-card.wide{ width:360px; }
+.wall-card.square{ aspect-ratio:1/1; width:220px; }
+
+.ending-close{
+  text-align:center; padding:5rem 6vw 6rem;
+  font-family:var(--mono); font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--grey);
+}
+
+footer.credit{
+  background:var(--bone); color:var(--grey); text-align:center; padding:2.4rem 6vw;
+  font-family:var(--mono); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase;
+}
+
+/* ============================================================ RESPONSIVE */
+@media (max-width:860px){
+  .nav-links a:not(.dot-only){ display:none; }
+  .nav-links{ gap:0.8rem; }
+  .hero-title-stage{ width:100%; aspect-ratio:1200/600; max-height:50vh; }
+  .hero{ align-items:flex-start; }
+  .g-item, .g-item.flip{ grid-template-columns:1fr; direction:ltr; }
+  .font-spec{ grid-template-columns:1fr; gap:1.2rem; }
+  .timeline-track{ margin-left:0; }
+  .tl-dot-pop{
+    right:auto; left:50%; top:calc(100% + 10px); transform:translateX(-50%) scale(0.94);
+  }
+  .tl-dot-pop::after{
+    right:auto; left:50%; top:-6px; transform:translateX(-50%) rotate(-90deg);
+  }
+  .tl-dot:hover .tl-dot-pop, .tl-dot:focus-within .tl-dot-pop{
+    transform:translateX(-50%) scale(1);
+  }
+  .why-grid{ grid-template-columns:1fr; }
+  .ta-notes{ grid-template-columns:1fr; }
+  .ll-word{ font-size:clamp(1.8rem,12vw,3.4rem); }
+}
+</style>
+</head>
+<body>
+
+<!-- SVG filter used for colour-vision-deficiency simulation (protanopia-leaning matrix) -->
+<svg width="0" height="0" style="position:absolute">
+  <filter id="protanopia-filter">
+    <feColorMatrix type="matrix" values="
+      0.567 0.433 0     0 0
+      0.558 0.442 0     0 0
+      0     0.242 0.758 0 0
+      0     0     0     1 0" />
+  </filter>
+</svg>
+
+<nav class="exhibit-nav">
+  <div class="nav-mark">H.L.</div>
+  <div class="nav-links">
+    <a href="#who" data-target="who">Who</a>
+    <a href="#fonts" data-target="fonts">Type</a>
+    <a href="#gallery" data-target="gallery">Work</a>
+    <a href="#influence" data-target="influence">Influence</a>
+  </div>
+  <button class="bulb-btn" id="bulbBtn" aria-label="Toggle colour vision simulation">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      <path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.4 10.9c.5.4.9 1 .9 1.6v.5h5v-.5c0-.6.4-1.2.9-1.6A6 6 0 0012 3z"/>
+    </svg>
+    <span class="bulb-tip">Herb Lubalin was colour blind. Toggle this mode to experience a simplified colour perception inspired by how he viewed colour.</span>
+  </button>
+</nav>
+
+<!-- ============================================================ HERO -->
+<header class="hero" id="hero">
+  <div class="wrap" style="width:100%;">
+    <div class="eyebrow hero-eyebrow">1918 — 1981 · Designer of Words</div>
+
+    <!-- ============================================================
+         HERO TITLE STAGE — this is the empty space you asked for.
+         Swap the three src attributes below for your own files:
+
+         1. .hts-title  -> your custom "Herb Lubalin" title image
+                           (shown by default)
+         2. .hts-video  -> your video (plays automatically on hover)
+         3. .hts-end    -> your edited second title image
+                           (shown once the video finishes, and stays)
+
+         Everything else (sizing, hover logic, fades) is already wired
+         up in the CSS/JS — you only need to drop in file paths/URLs.
+    ============================================================ -->
+    <div class="hero-title-stage" id="heroTitleStage">
+      <img
+        class="hts-layer hts-title"
+        id="htsTitle"
+        src="titlestates/lubalin-ini.svg"
+        alt="Herb Lubalin">
+      <video
+        class="hts-layer hts-video"
+        id="htsVideo"
+        src="titlestates/lubalin-mid.webm"
+        muted
+        playsinline
+        preload="auto"></video>
+      <img
+        class="hts-layer hts-end"
+        id="htsEnd"
+        src="titlestates/lubalin-fin.svg"
+        alt="Herb Lubalin — alternate title">
+    </div>
+  </div>
+  <div class="hero-scroll"><span class="bar"></span> Scroll</div>
+</header>
+
+<!-- ============================================================ WHO WAS HE -->
+<section class="who" id="who">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">01 · Biography</span>
+      <h2 class="section-title">Who Was<br>Herb Lubalin</h2>
+
+    </div>
+
+    <div class="who-body">
+      <div class="timeline-track" id="timelineTrack">
+        <div class="tl-item reveal-side">
+          <span class="tl-dot"><span class="tl-dot-pop"><span class="tl-dot-pop-placeholder">Image</span><img src="images/popup/lubalin1.webp" alt=""></span></span>
+          <span class="tl-year">1918</span><span class="tl-text">Born in New York City. Trained at Cooper Union.</span>
+        </div>
+        <div class="tl-item reveal-side">
+          <span class="tl-dot"><span class="tl-dot-pop"><span class="tl-dot-pop-placeholder">Image</span><img src="images/popup/lubalin2.jpg" alt=""></span></span>
+          <span class="tl-year">1945</span><span class="tl-text">Joins Sudler &amp; Hennessy, rises to art director within a decade.</span>
+        </div>
+        <div class="tl-item reveal-side">
+          <span class="tl-dot"><span class="tl-dot-pop"><span class="tl-dot-pop-placeholder">Image</span><img src="images/popup/lubalin3.jpg" alt=""></span></span>
+          <span class="tl-year">1961</span><span class="tl-text">Designs the "Mother &amp; Child" logotype — a full sentence built from one letterform.</span>
+        </div>
+        <div class="tl-item reveal-side">
+          <span class="tl-dot"><span class="tl-dot-pop"><span class="tl-dot-pop-placeholder">Image</span><img src="images/popup/lubalin4.webp" alt=""></span></span>
+          <span class="tl-year">1964</span><span class="tl-text">Opens Herb Lubalin Inc., his own studio.</span>
+        </div>
+        <div class="tl-item reveal-side">
+          <span class="tl-dot"><span class="tl-dot-pop"><span class="tl-dot-pop-placeholder">Image</span><img src="images/popup/lubalin5.jpg" alt=""></span></span>
+          <span class="tl-year">1970</span><span class="tl-text">Co-founds International Typeface Corporation (ITC) and launches <em>Avant Garde</em> magazine.</span>
+        </div>
+        <div class="tl-item reveal-side">
+          <span class="tl-dot"><span class="tl-dot-pop"><span class="tl-dot-pop-placeholder">Image</span><img src="images/popup/lubalin6.jpg" alt=""></span></span>
+          <span class="tl-year">1971</span><span class="tl-text">Designs the Families logotype for the Center for Family Planning — one wordmark, one embrace.</span>
+        </div>
+        <div class="tl-item reveal-side">
+          <span class="tl-dot"><span class="tl-dot-pop"><span class="tl-dot-pop-placeholder">Image</span><img src="images/popup/lubalin7.png" alt=""></span></span>
+          <span class="tl-year">1981</span><span class="tl-text">Dies in New York, leaving behind ITC Avant Garde Gothic, Lubalin Graph, and a new visual language.</span>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           DRAG ZONE — the wrapper below (.who-drag-zone) has no
+           background, border, or visible styling of any kind; it is
+           purely a boundary. Its height is stretched by the CSS grid
+           to match the timeline column exactly, so it runs from the
+           top of the "1918" row to the bottom of the "1981" row and
+           nowhere else. The four tiles inside are the only visible,
+           draggable things — drag one and it's clamped so it can
+           never leave this invisible box.
+
+           To use your own photos: replace the four src paths below
+           (images/who/drag-1.jpg … drag-4.jpg) with your files. Until
+           a real file exists at that path, each tile just shows a
+           plain placeholder instead of a broken image.
+      ============================================================ -->
+      <div class="who-drag-zone" id="whoDragZone">
+        <div class="who-drag-item" id="whoDrag1">
+          <div class="who-drag-placeholder">Image 1<br>images/artifacts/artifact1.png</div>
+          <img src="images/artifacts/artifact1.png" alt="">
+        </div>
+        <div class="who-drag-item" id="whoDrag2">
+          <div class="who-drag-placeholder">Image 2<br>images/artifacts/artifact2.png</div>
+          <img src="images/artifacts/artifact2.png" alt="">
+        </div>
+        <div class="who-drag-item" id="whoDrag3">
+          <div class="who-drag-placeholder">Image 3<br>images/artifacts/artifact3.png</div>
+          <img src="images/artifacts/artifact3.png" alt="">
+        </div>
+        <div class="who-drag-item" id="whoDrag4">
+          <div class="who-drag-placeholder">Image 4<br>images/artifacts/artifact4.png</div>
+          <img src="images/artifacts/artifact4.png" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ WHY HE CHANGED TYPOGRAPHY -->
+<section class="why" id="why">
+  <div class="wrap">
+    <div class="why-main reveal">
+      <span class="eyebrow">02 · Philosophy</span>
+
+      <!-- ============================================================
+           Justified word/rectangle flow. Each .why-row is one line —
+           keywords (.why-word) and placeholder rectangles (.why-box)
+           share the line, with .why-box set to flex:1 so it grows to
+           fill whatever space is left, keeping every row balanced
+           edge-to-edge no matter how many words/boxes it holds.
+
+           Right after each row sits a matching .why-panel: hidden by
+           default, it opens (via JS toggling the "open" class) when
+           any keyword in that row is hovered, and collapses on
+           mouseleave. Because it's a normal block in the flow — not
+           absolutely positioned — opening it pushes every row below
+           it downward automatically.
+
+           To add a real image to a keyword's panel: set
+           data-img="path/to/image.jpg" on that <span class="why-word">.
+      ============================================================ -->
+      <div class="why-flow" id="whyFlow">
+
+        <div class="why-row heading">
+          <span class="why-title">Significant Contribution</span>
+        </div>
+
+        <div class="why-row">
+          <span class="why-box"></span>
+          <span class="why-word"
+                data-title="The Logo Is the Argument"
+                data-desc="Families, Mother &amp; Child, Marriage — Lubalin's logotypes never illustrated their subject with a separate picture. The letters themselves were redrawn and fused until the shape of the word became the shape of the idea, so the mark could be read and understood in the same instant.||This is what design historians mean when they call him the father of conceptual typography: the concept doesn't sit next to the type, waiting to be explained by a tagline. It lives inside the joints between the letters, in exactly the place a client would expect plain, neutral lettering."
+                data-img="images/sigcon/SC1.jpg">Custom&nbsp;Ligature</span>
+        </div>
+        <div class="why-panel" id="whyPanel1"><div class="why-panel-inner">
+          <div class="why-panel-frame"><img alt=""></div>
+          <div class="why-panel-text"><h4></h4></div>
+        </div></div>
+
+        <div class="why-row">
+          <span class="why-word"
+                data-title="Design Needs No Permission"
+                data-desc="Avant Garde and Eros didn't just break grid conventions inside a portfolio review — they broke them on newsstands, in front of ordinary readers who had never been told the rules existed in the first place. Type ran off the edge of the page, headlines were set at a scale magazines simply didn't use, and columns bled into one another on purpose.||Lubalin treated the grid as a starting position to argue with, not a boundary to respect. That stance is exactly what later punk, grunge and web-era designers pointed back to when they needed historical cover for breaking their own rules."
+                data-img="images/sigcon/SC3.jpg">Grids</span>
+          <span class="why-box"></span>
+          <span class="why-word"
+                data-title="Kerning Is Emotion"
+                data-desc="Most kerning in the 1960s existed to keep letters legible and evenly spaced — a technical correction, invisible when done well. Lubalin inverted the purpose: he pulled pairs of letters into contact deliberately, past the point of comfort, because the tightness itself was the message.||A word set that close reads as urgent, intimate, or inseparable before a viewer consciously parses a single letterform. He was treating the gap between two shapes as material he could sculpt, the same way a sculptor treats negative space, rather than as a technical setting to leave on default."
+                data-img="images/sigcon/SC2.jpg">Kerning</span>
+          <span class="why-box fixed"></span>
+        </div>
+        <div class="why-panel" id="whyPanel2"><div class="why-panel-inner">
+          <div class="why-panel-frame"><img alt=""></div>
+          <div class="why-panel-text"><h4></h4></div>
+        </div></div>
+
+        <div class="why-row">
+          <span class="why-box"></span>
+          <span class="why-word"
+                data-title="Type Can Speak"
+                data-desc="He made letters carry tone — tender, aggressive, ironic, clinical — before a reader parsed a single word or noticed a single image. A headline for Eros could look nothing like a headline for a pharmaceutical ad, even set in a related typeface, because the weight, spacing and silhouette were doing the emotional work usually left to illustration.||This is the throughline his later admirers point to most often: that typography isn't a neutral container for meaning, it's a performance of it, and the choice of letterform is itself an editorial opinion."
+                data-img="images/sigcon/SC4.jpg">Expressive&nbsp;Type</span>
+          <span class="why-box"></span>
+          <span class="why-word"
+                data-title="From Sketch to Ligature"
+                data-desc="Every interlock started as pencil on layout paper, long before it became a polished piece of camera-ready art. Lubalin and his letterers — most often Tom Carnase — would draw a word dozens of times, testing where two letters could plausibly share a stroke without losing the reader.||Nothing about the finished ligatures was automatic or generated; it was drawn, erased, and redrawn by hand until the letters agreed to touch. That slow, iterative process is part of why the results still look inevitable rather than gimmicky decades later — the easy version was rejected first."
+                data-img="images/sigcon/SC6.webp">Sketches</span>
+        </div>
+        <div class="why-panel" id="whyPanel3"><div class="why-panel-inner">
+          <div class="why-panel-frame"><img alt=""></div>
+          <div class="why-panel-text"><h4></h4></div>
+        </div></div>
+
+        <div class="why-row">
+          <span class="why-box fixed"></span>
+          <span class="why-word"
+                data-title="A Language Others Borrowed"
+                data-desc="His ligatures and condensed display faces became a visual shorthand that later designers reached for constantly, often without knowing exactly where it came from — a tightly kerned wordmark, a letter standing in for an image, a headline redrawn rather than simply set.||You can trace a straight line from his 1960s and 70s work through the expressive editorial design of the 1980s and 90s and into contemporary branding, where a custom wordmark is still the default answer to 'make this feel considered.' The vocabulary outlived the man, the studio, and even most of the magazines it first appeared in."
+                data-img="images/sigcon/SC5.webp">Lasting&nbsp;Influence</span>
+          <!-- no more keywords on this line — fill the rest with a plain box so the right edge still lines up with the rows above -->
+          <span class="why-box"></span>
+        </div>
+        <div class="why-panel" id="whyPanel4"><div class="why-panel-inner">
+          <div class="why-panel-frame"><img alt=""></div>
+          <div class="why-panel-text"><h4></h4></div>
+        </div></div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ FONTS -->
+<section class="fonts" id="fonts">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow" style="color:var(--ochre)">03 · Typefaces</span>
+      <h2 class="section-title">The Type<br>He Left Behind</h2>
+    </div>
+
+    <div class="font-spec reveal">
+      <div>
+        <div class="fname">L&amp;C Hairline — 1966</div>
+        <div class="fdesc">Drawn with Tom Carnase, years before ITC existed. Strokes pared down to the thinnest possible line, so light the letters nearly disappear until they're set at real size.</div>
+      </div>
+      <div class="font-big" data-font="hairline">Ha Li</div>
+    </div>
+
+    <div class="font-spec reveal">
+      <div>
+        <div class="fname">Avant Garde Gothic — 1970</div>
+        <div class="fdesc">Geometric, circular, built for the magazine masthead. Its tight ligatures became a design cliché the moment they became a design language.</div>
+      </div>
+      <div class="font-big" data-font="avantgarde">Aa Ga</div>
+    </div>
+
+    <div class="font-spec reveal">
+      <div>
+        <div class="fname">ITC Ronda — 1970</div>
+        <div class="fdesc">Angular and faceted, built from straight diagonal strokes instead of curves — type behaving like cut paper.</div>
+      </div>
+      <div class="font-big" data-font="ronda">Rn Da</div>
+    </div>
+
+    <div class="font-spec reveal">
+      <div>
+        <div class="fname">Lubalin Graph — 1974</div>
+        <div class="fdesc">A slab serif drawn with the same geometric discipline as Avant Garde — heavy, confident, unmistakably architectural.</div>
+      </div>
+      <div class="font-big" data-font="lubalingraph">Lg Rt</div>
+    </div>
+
+    <div class="font-spec reveal">
+      <div>
+        <div class="fname">ITC Serif Gothic — 1974</div>
+        <div class="fdesc">Drawn with Tony DiSpigna. A serif with none of a serif's usual warmth, sharp wedge-shaped terminals grafted onto the same circular bones as Avant Garde.</div>
+      </div>
+      <div class="font-big" data-font="serifgothic">Se Go</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ WORK GALLERY -->
+<section class="gallery" id="gallery">
+  <div class="wrap">
+    <div class="section-head reveal gallery-head">
+      <div>
+        <span class="eyebrow">04 · Gallery</span>
+        <h2 class="section-title" style="color:var(--ink)">Selected<br>Work</h2>
+      </div>
+      <!-- Immersive-view toggle: off by default (labels visible). Click
+           to fade the captions out so the pieces stand alone, like
+           walking a real gallery wall instead of reading a catalogue. -->
+      <button class="g-toggle" id="galleryToggle" type="button" aria-pressed="false">
+        <span class="g-toggle-dot"></span>
+        <span class="g-toggle-label">Hide Labels</span>
+        <span class="g-toggle-tip">In his own magazine spreads, Lubalin often let a single image or an oversized headline run the whole page, pushing captions and body copy to the margins — the picture argued the point, and text only confirmed it. This toggle recreates that instinct: turn it on and the work has to speak for itself.</span>
+      </button>
+    </div>
+    <div class="gallery-grid">
+
+      <div class="g-item reveal">
+        <div class="g-frame reveal-scale"><img src="images/gallery/AvantGarde.jpg" alt="Avant Garde Magazine cover, Issue 1, bold red masthead"></div>
+        <div class="g-caption reveal">
+          <span class="eyebrow">Editorial · 1968</span>
+          <h3>Avant Garde Magazine</h3>
+          <p>The masthead logotype became the era's most imitated piece of lettering.</p>
+        </div>
+      </div>
+
+      <div class="g-item flip reveal">
+        <div class="g-frame reveal-scale"><img src="images/gallery/Families.jpg" alt="Families logotype, interlocking figures forming the word Families"></div>
+        <div class="g-caption reveal">
+          <span class="eyebrow">Logotype · 1971</span>
+          <h3>Families</h3>
+          <p>Letterforms link arms — literally — to form a single embracing word.</p>
+        </div>
+      </div>
+
+      <div class="g-item reveal">
+        <div class="g-frame reveal-scale"><img src="images/gallery/Mother&Child.jpg" alt="Mother & Child spread, tight ligature between Mother and the ampersand"></div>
+        <div class="g-caption reveal">
+          <span class="eyebrow">Logotype · 1965</span>
+          <h3>Mother &amp; Child</h3>
+          <p>An ampersand drawn so tenderly it reads as an illustration, not a symbol.</p>
+        </div>
+      </div>
+
+      <div class="g-item flip reveal">
+        <div class="g-frame reveal-scale"><img src="images/gallery/Eros.jpg" alt="Eros magazine spread, oversized single-word headline"></div>
+        <div class="g-caption reveal">
+          <span class="eyebrow">Editorial · 1962</span>
+          <h3>Eros</h3>
+          <p>Only four issues, and yet one of the most referenced magazines in design history.</p>
+        </div>
+      </div>
+
+      <div class="g-item reveal">
+        <div class="g-frame reveal-scale"><img src="images/gallery/lubalingraph.webp" alt="Lubalin Graph specimen sheet, full alphabet in heavy weight"></div>
+        <div class="g-caption reveal">
+          <span class="eyebrow">Type Specimen · 1974</span>
+          <h3>Lubalin Graph</h3>
+          <p>A slab serif designed to be read from across a newsstand rack.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ TYPOGRAPHY ANALYSIS -->
+<section class="tanalysis" id="tanalysis">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow" style="color:var(--ochre)">05 · Close Reading</span>
+      <h2 class="section-title">Anatomy of<br>a Ligature</h2>
+    </div>
+    <div class="ta-stage reveal">
+      <div class="ta-word">
+        <span class="lg" id="taWord">Ma<span style="position:relative;">&amp;<span class="hotspot active" data-key="ligature" style="left:50%; top:22%;"><span class="hs-num">1</span></span></span>r<span class="hotspot" data-key="kerning" style="left:14%; top:86%;"><span class="hs-num">2</span></span><span class="hotspot" data-key="weight" style="left:100%; top:86%;"><span class="hs-num">3</span></span></span>
+      </div>
+    </div>
+    <div class="ta-notes reveal">
+      <div class="ta-note active" data-key="ligature">
+        <span class="tag"><span class="tag-num">1</span> Ligature</span>
+        <p>The ampersand fuses directly into the neighbouring letters — no counter, no gap, one continuous stroke.</p>
+      </div>
+      <div class="ta-note" data-key="kerning">
+        <span class="tag"><span class="tag-num">2</span> Kerning</span>
+        <p>Letters are pulled far tighter than convention allows, so the word reads as one shape before it reads as text.</p>
+      </div>
+      <div class="ta-note" data-key="weight">
+        <span class="tag"><span class="tag-num">3</span> Weight</span>
+        <p>A heavy, geometric stroke keeps the mark legible at a glance — logo-scale confidence, not paragraph-scale caution.</p>
+      </div>
+    </div>
+    <p style="text-align:center; margin-top:2rem; font-family:var(--mono); font-size:0.7rem; color:var(--grey); letter-spacing:0.06em;">Click a marker or a note — they're linked</p>
+  </div>
+</section>
+
+<!-- ============================================================ CASE STUDY: MOTHER & CHILD -->
+<section class="mchild" id="motherchild">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow" style="color:var(--ochre)">06 · Case Study</span>
+      <h2 class="section-title" style="color:var(--bone)">Mother<br><span class="mc-amp">&amp;</span> Child</h2>
+    </div>
+
+    <p class="mc-intro reveal">Herb Lubalin drew this logotype in 1965, and it has outlived every client it was ever made for. Hover or tap a marker to see where each decision lives.</p>
+
+    <div class="mc-stage reveal-scale">
+      <!--
+        To add the artwork: set the src below on #mcImg, e.g.
+        <img class="mc-img" id="mcImg" src="mother-child.jpg" alt="...">
+        The placeholder box hides itself automatically once a src is present.
+        The six .mc-dot markers below use placeholder left/top percentages;
+        nudge each one once the real image is in so it sits on the right spot.
+      -->
+      <div class="mc-frame" id="mcFrame">
+        <div class="mc-placeholder" id="mcPlaceholder">
+          <span class="mc-placeholder-icon">+</span>
+          <span>Image placeholder<br>add a src to #mcImg in code</span>
+        </div>
+        <img class="mc-img" id="mcImg" src="images/anatomy/motherrchild.png" alt="Herb Lubalin's Mother &amp; Child logotype">
+        <div class="mc-hotspots" id="mcHotspots">
+          <button type="button" class="mc-dot active" data-key="ligature" aria-label="The Ampersand" style="left:31%; top:52%;"></button>
+          <button type="button" class="mc-dot" data-key="kerning" aria-label="Kerning" style="left:80%; top:33%;"></button>
+          <button type="button" class="mc-dot" data-key="terminal" aria-label="Redrawn Terminal" style="left:94%; top:65%;"></button>
+          <button type="button" class="mc-dot" data-key="tone" aria-label="Warmth Over Precision" style="left:35%; top:68%;"></button>
+          <button type="button" class="mc-dot" data-key="nesting" aria-label="The Nested O" style="left:28%; top:58%;"></button>
+          <button type="button" class="mc-dot" data-key="scale" aria-label="Scale" style="left:38%; top:60%;"></button>
+          <button type="button" class="mc-dot" data-key="bond" aria-label="The Bond" style="left:52%; top:31%;"></button>
+          <button type="button" class="mc-dot" data-key="serif" aria-label="The Serif" style="left:10%; top:33%;"></button>
+          <button type="button" class="mc-dot" data-key="negativespace" aria-label="Negative Space" style="left:68.5%; top:55%;"></button>
+        </div>
+      </div>
+
+      <div class="mc-readout">
+        <span class="mc-readout-word" id="mcReadoutWord">Ampersand</span>
+        <div class="mc-readout-text" id="mcReadoutText"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ LOGOTYPE WORKSHOP -->
+<section class="ligature-lab" id="ligaturelab">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">07 · Interactive</span>
+      <h2 class="section-title" style="color:var(--ink)">The Logotype<br>Workshop</h2>
+    </div>
+    <p class="ll-intro reveal">Lubalin never pulled a logotype off the shelf — he hand-built every letter: slanted, re-weighted, and pulled close enough to its neighbor to share a stroke. Click a letter below and shape it yourself, or hit Remix and let the workshop surprise you.</p>
+
+    <div class="ll-stage reveal-scale">
+      <div class="ll-word" id="wlWord"></div>
+    </div>
+
+    <!-- ============================================================
+         Editing panel for whichever letter is currently selected
+         (click any letter in the stage above to select it).
+    ============================================================ -->
+    <div class="wl-panel reveal" id="wlPanel">
+      <div class="wl-panel-row">
+        <span class="wl-panel-label">Editing "<span id="wlSelectedChar">L</span>"</span>
+        <span class="wl-panel-desc" id="wlSelectedDesc"></span>
+      </div>
+
+      <div class="wl-control">
+        <span class="wl-control-label">Slant</span>
+        <input type="range" id="wlSlant" min="-24" max="24" value="0" aria-label="Letter slant">
+      </div>
+
+      <div class="wl-control">
+        <span class="wl-control-label">Spacing</span>
+        <input type="range" id="wlSpacing" min="0" max="100" value="0" aria-label="Space to next letter">
+      </div>
+
+      <div class="wl-control">
+        <span class="wl-control-label">Weight</span>
+        <div class="wl-btn-row" id="wlWeightRow">
+          <button data-weight="400">Regular</button>
+          <button data-weight="700" class="active">Bold</button>
+          <button data-weight="900">Black</button>
+        </div>
+      </div>
+
+      <div class="wl-control">
+        <span class="wl-control-label">Color</span>
+        <div class="wl-btn-row" id="wlColorRow">
+          <button data-color="ink" class="active"><span class="wl-swatch" style="background:var(--ink)"></span>Ink</button>
+          <button data-color="lubred"><span class="wl-swatch" style="background:var(--lubred)"></span>Red</button>
+          <button data-color="teal"><span class="wl-swatch" style="background:var(--teal)"></span>Teal</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="wl-actions reveal">
+      <label class="ll-input-wrap">
+        <span class="ll-input-label">Your word</span>
+        <input type="text" id="wlInput" maxlength="16" value="LUBALIN" autocomplete="off" spellcheck="false">
+      </label>
+      <div class="wl-action-btns">
+        <button class="wl-action primary" id="wlRemix" type="button">Remix</button>
+        <button class="wl-action" id="wlReset" type="button">Reset</button>
+      </div>
+    </div>
+
+    <div class="ll-words reveal" id="wlPresets">
+      <button data-word="AVANT GARDE" data-style="avantgarde" class="active">Avant Garde</button>
+      <button data-word="FAMILIES" data-style="families">Families</button>
+      <button data-word="TYPE" data-style="simple">Type</button>
+      <button data-word="EROS" data-style="eros">Eros</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ INFLUENCE -->
+<section class="influence" id="influence">
+  <div class="wrap">
+    <div class="section-head reveal" style="text-align:center;">
+      <span class="eyebrow" style="color:var(--ochre)">08 · Legacy</span>
+      <h2 class="section-title">Who He<br>Influenced</h2>
+    </div>
+    <!-- ============================================================
+         Hover or focus a name to open a short, sourced note on how
+         that designer connects to Lubalin, plus one representative
+         work of theirs. These are documented facts from design
+         history, not attributed quotations — verifiable statements
+         only, never invented first-person lines put in a real
+         person's mouth.
+    ============================================================ -->
+    <div class="influence-names reveal" id="influenceNames">
+      <span class="inf-name" tabindex="0"
+            data-note="Glaser and Lubalin were the two defining letterform stylists of New York's expressive-typography renaissance in the 1960s and 70s — design historians still group them together as the movement's twin figureheads, each treating type and image as the same problem."
+            data-work="Notable work: the “I ♥ NY” logo (1977)">Milton Glaser</span>
+      <span class="inf-name" tabindex="0"
+            data-note="Scher's illustrative, image-as-type approach is traced by design historians directly to the New York lineage Lubalin (alongside Seymour Chwast) established — the idea that type itself could carry a picture's worth of meaning, not just sit beside one."
+            data-work="Notable work: The Public Theater identity (1994)">Paula Scher</span>
+      <span class="inf-name" tabindex="0"
+            data-note="Carson belongs to the generation of American designers who inherited Lubalin's core premise — that a page's typography can be the message rather than a neutral vehicle for it — and pushed it toward outright illegibility as an expressive choice."
+            data-work="Notable work: Ray Gun magazine layouts (1992–1995)">David Carson</span>
+      <span class="inf-name" tabindex="0"
+            data-note="Brody extended Lubalin's habit of redrawing a headline by hand rather than pulling it from a type case, building entire self-made alphabets for a single magazine the way Lubalin built entire ligatures for a single logotype."
+            data-work="Notable work: The Face magazine redesign (1981–1986)">Neville Brody</span>
+      <span class="inf-name" tabindex="0"
+            data-note="Kidd has named Lubalin's magazine work among the reference points design historians place directly ahead of his own image-driven book jackets, where the cover's typography and concept are designed as a single inseparable move."
+            data-work="Notable work: Jurassic Park jacket for Alfred A. Knopf (1990)">Chip Kidd</span>
+      <span class="inf-name" tabindex="0"
+            data-note="Sagmeister trained at Tibor Kalman's M&amp;Co in New York before founding his own studio — a direct link in the same downtown lineage of idea-first, image-making typography that runs back through Kalman to Lubalin's generation."
+            data-work="Notable work: Lou Reed, Set the Twilight Reeling album art (1996)">Stefan Sagmeister</span>
+      <span class="inf-name" tabindex="0"
+            data-note="Fili isn't just influenced by Lubalin — she was on staff in his studio for three years before becoming art director at Pantheon Books, where his emphasis on hand-built, era-specific lettering shaped the more than 2,000 book jackets she went on to design."
+            data-work="Notable work: Pantheon Books jacket design (1970s–80s)">Louise Fili</span>
+      <span class="inf-name" tabindex="0"
+            data-note="Valicenti founded the Chicago studio Thirst a generation after Lubalin, and design historians place his idea-first, typography-as-image practice on the same continuum Lubalin opened up for American designers working outside New York's ad agencies."
+            data-work="Notable work: identity &amp; poster work for Thirst / 3st (est. 1989)">Rick Valicenti</span>
+    </div>
+
+    <div class="inf-panel" id="infPanel"><div class="inf-panel-inner">
+      <p class="inf-panel-text" id="infPanelText"></p>
+      <span class="inf-panel-work" id="infPanelWork"></span>
+    </div></div>
+
+    <p class="influence-sub reveal">Every designer who has ever let a headline become the image, not the caption, is working in a room Lubalin built.</p>
+  </div>
+</section>
+
+<!-- ============================================================ ENDING WALL -->
+<section class="ending" id="ending">
+  <div class="ending-title reveal-scale">HERB<br><span class="accent">LUBALIN</span></div>
+  <div class="wall">
+    <div class="marquee-row left" id="row1"></div>
+    <div class="marquee-row right slow" id="row2"></div>
+    <div class="marquee-row left slow" id="row3"></div>
+  </div>
+  <div class="ending-close">The exhibition ends. The typography doesn't.</div>
+</section>
+
+<footer class="credit">An interactive tribute · Not affiliated with the Lubalin estate · Built in type, not in text</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- hero title stage: hover -> plays video -> freezes on end image ---------- */
+  const htStage = document.getElementById('heroTitleStage');
+  const htVideo = document.getElementById('htsVideo');
+
+  if(htStage && htVideo){
+    let htDone = false;      // true once the video has finished — stays on end image
+    let htPlaying = false;
+
+    htStage.addEventListener('mouseenter', ()=>{
+      if(htDone) return;               // already resolved to the end image, do nothing more
+      htPlaying = true;
+      htStage.classList.add('is-playing');
+      htVideo.currentTime = 0;
+      htVideo.play().catch(()=>{ /* autoplay might be blocked until user has interacted with the page */ });
+    });
+
+    htStage.addEventListener('mouseleave', ()=>{
+      if(htDone) return;
+      if(htPlaying){
+        htVideo.pause();
+        htStage.classList.remove('is-playing');
+        htPlaying = false;
+      }
+    });
+
+    htVideo.addEventListener('ended', ()=>{
+      htDone = true;
+      htPlaying = false;
+      htStage.classList.remove('is-playing');
+      htStage.classList.add('is-done');   // reveals .hts-end and stays there
+    });
+  }
+
+  /* ---------- "why" flow: hover a keyword -> its own row's panel expands underneath ---------- */
+  const whyFlow = document.getElementById('whyFlow');
+
+  if(whyFlow){
+    const whyWords = Array.from(whyFlow.querySelectorAll('.why-word'));
+
+    function whyOpen(word){
+      const row = word.closest('.why-row');
+      const panel = row ? row.nextElementSibling : null;
+      if(!panel || !panel.classList.contains('why-panel')) return;
+
+      word.classList.add('active');
+      const h4 = panel.querySelector('h4');
+      const textWrap = panel.querySelector('.why-panel-text');
+      const img = panel.querySelector('img');
+      h4.textContent = word.dataset.title || '';
+      // data-desc may hold multiple paragraphs separated by "||"
+      textWrap.querySelectorAll('p').forEach(p => p.remove());
+      (word.dataset.desc || '').split('||').forEach(chunk=>{
+        const p = document.createElement('p');
+        p.textContent = chunk.trim();
+        textWrap.appendChild(p);
+      });
+      if(word.dataset.img){
+        img.src = word.dataset.img;
+        img.style.display = 'block';
+      } else {
+        img.removeAttribute('src');
+        img.style.display = 'none';
+      }
+      panel.classList.add('open');
+      panel.dataset.openBy = word.dataset.title || '';
+    }
+
+    function whyClose(word){
+      const row = word.closest('.why-row');
+      const panel = row ? row.nextElementSibling : null;
+      word.classList.remove('active');
+      if(!panel || !panel.classList.contains('why-panel')) return;
+      // only collapse if no other word in the same row is still active/hovered
+      const stillActive = row.querySelector('.why-word.active');
+      if(!stillActive) panel.classList.remove('open');
+    }
+
+    whyWords.forEach(word=>{
+      word.setAttribute('tabindex', '0');
+      word.addEventListener('mouseenter', ()=> whyOpen(word));
+      word.addEventListener('mouseleave', ()=> whyClose(word));
+      word.addEventListener('focus', ()=> whyOpen(word));
+      word.addEventListener('blur', ()=> whyClose(word));
+    });
+  }
+
+  /* ---------- intersection observer reveals ---------- */
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold:0.18 });
+
+  document.querySelectorAll('.reveal, .reveal-scale, .reveal-side, .letters').forEach((el, i)=>{
+    el.style.transitionDelay = (i % 4) * 70 + 'ms';
+    io.observe(el);
+  });
+
+  /* ---------- influence: hover a name -> documented connection + notable work ---------- */
+  (function(){
+    const names = document.querySelectorAll('#influenceNames .inf-name');
+    const panel = document.getElementById('infPanel');
+    const text = document.getElementById('infPanelText');
+    const work = document.getElementById('infPanelWork');
+    if(!names.length || !panel) return;
+
+    function openNote(el){
+      names.forEach(n=> n.classList.remove('active'));
+      el.classList.add('active');
+      text.textContent = el.dataset.note || '';
+      work.textContent = el.dataset.work || '';
+      panel.classList.add('open');
+    }
+    function closeNote(el){
+      el.classList.remove('active');
+      const stillActive = document.querySelector('#influenceNames .inf-name.active');
+      if(!stillActive) panel.classList.remove('open');
+    }
+    names.forEach(n=>{
+      n.addEventListener('mouseenter', ()=> openNote(n));
+      n.addEventListener('mouseleave', ()=> closeNote(n));
+      n.addEventListener('focus', ()=> openNote(n));
+      n.addEventListener('blur', ()=> closeNote(n));
+    });
+  })();
+
+  /* ---------- nav active section indicator ---------- */
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const sections = ['who','fonts','gallery','influence'].map(id=>document.getElementById(id));
+  const navIO = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      const link = document.querySelector('.nav-links a[data-target="'+entry.target.id+'"]');
+      if(!link) return;
+      if(entry.isIntersecting){
+        navLinks.forEach(l=>l.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  }, { rootMargin:'-45% 0px -45% 0px' });
+  sections.forEach(s=> s && navIO.observe(s));
+
+  /* ---------- colour-blind simulation toggle ---------- */
+  const bulbBtn = document.getElementById('bulbBtn');
+  let cbOn = false;
+  bulbBtn.addEventListener('click', ()=>{
+    cbOn = !cbOn;
+    document.body.classList.add('cb-transition');
+    document.documentElement.classList.toggle('cb-active', cbOn);
+    bulbBtn.classList.toggle('active', cbOn);
+    setTimeout(()=> document.body.classList.remove('cb-transition'), 1200);
+  });
+
+  /* ---------- gallery immersive toggle: hide/show captions ---------- */
+  const galleryEl = document.getElementById('gallery');
+  const galleryToggle = document.getElementById('galleryToggle');
+
+  if(galleryEl && galleryToggle){
+    let labelsHidden = false; // off by default — labels visible until deliberately toggled
+    const galleryLabel = galleryToggle.querySelector('.g-toggle-label');
+
+    galleryToggle.addEventListener('click', ()=>{
+      labelsHidden = !labelsHidden;
+      galleryEl.classList.toggle('g-immersive', labelsHidden);
+      galleryToggle.classList.toggle('active', labelsHidden);
+      galleryToggle.setAttribute('aria-pressed', String(labelsHidden));
+      galleryLabel.textContent = labelsHidden ? 'Show Labels' : 'Hide Labels';
+    });
+  }
+
+  /* ---------- typography analysis: hotspots <-> notes ---------- */
+  const taHotspots = document.querySelectorAll('.ta-word .hotspot');
+  const taNotes = document.querySelectorAll('.ta-note');
+  function setTaKey(key){
+    taHotspots.forEach(h=> h.classList.toggle('active', h.dataset.key===key));
+    taNotes.forEach(n=> n.classList.toggle('active', n.dataset.key===key));
+  }
+  taHotspots.forEach(h=> h.addEventListener('click', ()=> setTaKey(h.dataset.key)));
+  taNotes.forEach(n=> n.addEventListener('click', ()=> setTaKey(n.dataset.key)));
+
+  /* ---------- who: timeline hover photo frame ---------- */
+  (function(){
+    // timeline dot popups: reveal each thumbnail only once its image
+    // actually loads, otherwise keep showing the placeholder box
+    const tlPops = document.querySelectorAll('.tl-dot-pop');
+    tlPops.forEach(pop=>{
+      const img = pop.querySelector('img');
+      if(!img) return;
+      img.addEventListener('load', ()=> pop.classList.add('has-image'));
+      img.addEventListener('error', ()=> pop.classList.remove('has-image'));
+    });
+
+    const zone = document.getElementById('whoDragZone');
+    const dragItems = zone ? Array.from(zone.querySelectorAll('.who-drag-item')) : [];
+    if(zone && dragItems.length){
+      const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+      // placeholder <-> real image: only reveal the img once it actually loads
+      dragItems.forEach(item=>{
+        const img = item.querySelector('img');
+        if(!img) return;
+        img.addEventListener('load', ()=> item.classList.add('has-image'));
+        img.addEventListener('error', ()=> item.classList.remove('has-image'));
+      });
+
+      // cascading starting layout — image 2 sits below image 1, image 3
+      // below image 2, image 4 below image 3, each nudged sideways by a
+      // different amount so the stack reads as scattered, not a straight
+      // vertical column
+      const presets = [
+        { left:0.06, top:0.00, rot:-4 },
+        { left:0.34, top:0.25, rot:3 },
+        { left:0.10, top:0.52, rot:2 },
+        { left:0.38, top:0.77, rot:-3 }
+      ];
+
+      function placeInitial(){
+        const zr = zone.getBoundingClientRect();
+        if(zr.width === 0 || zr.height === 0) return;
+        dragItems.forEach((item, i)=>{
+          const p = presets[i % presets.length];
+          const iw = item.offsetWidth || 150;
+          const ih = item.offsetHeight || 188;
+          const x = clamp(p.left * zr.width, 0, Math.max(0, zr.width - iw));
+          const y = clamp(p.top * zr.height, 0, Math.max(0, zr.height - ih));
+          item.style.left = x + 'px';
+          item.style.top = y + 'px';
+          item.style.setProperty('--rot', p.rot + 'deg');
+          item.style.zIndex = 10 + i;
+        });
+      }
+
+      // grid stretch settles a beat after paint, and images may still be loading
+      window.setTimeout(placeInitial, 60);
+      window.addEventListener('load', placeInitial);
+
+      let activeItem = null, offsetX = 0, offsetY = 0;
+
+      function onPointerDown(e){
+        const item = e.currentTarget;
+        activeItem = item;
+        const zr = zone.getBoundingClientRect();
+        const ir = item.getBoundingClientRect();
+        offsetX = e.clientX - ir.left;
+        offsetY = e.clientY - ir.top;
+        item.classList.add('dragging');
+        try{ item.setPointerCapture(e.pointerId); }catch(err){}
+        e.preventDefault();
+      }
+
+      function onPointerMove(e){
+        if(activeItem !== e.currentTarget) return;
+        const zr = zone.getBoundingClientRect();
+        const iw = activeItem.offsetWidth;
+        const ih = activeItem.offsetHeight;
+        // position is always resolved relative to the zone, then clamped to
+        // its bounds — this is what keeps every tile locked inside the
+        // invisible box no matter how far the pointer travels past its edge
+        let x = e.clientX - zr.left - offsetX;
+        let y = e.clientY - zr.top - offsetY;
+        x = clamp(x, 0, Math.max(0, zr.width - iw));
+        y = clamp(y, 0, Math.max(0, zr.height - ih));
+        activeItem.style.left = x + 'px';
+        activeItem.style.top = y + 'px';
+      }
+
+      function onPointerUp(e){
+        if(activeItem !== e.currentTarget) return;
+        activeItem.classList.remove('dragging');
+        try{ activeItem.releasePointerCapture(e.pointerId); }catch(err){}
+        activeItem = null;
+      }
+
+      dragItems.forEach(item=>{
+        item.addEventListener('pointerdown', onPointerDown);
+        item.addEventListener('pointermove', onPointerMove);
+        item.addEventListener('pointerup', onPointerUp);
+        item.addEventListener('pointercancel', onPointerUp);
+      });
+
+      // if the zone's size changes (resize/orientation), pull any tile
+      // that's now outside the new bounds back inside
+      let resizeT;
+      window.addEventListener('resize', ()=>{
+        clearTimeout(resizeT);
+        resizeT = window.setTimeout(()=>{
+          const zr = zone.getBoundingClientRect();
+          dragItems.forEach(item=>{
+            const ir = item.getBoundingClientRect();
+            let x = clamp(ir.left - zr.left, 0, Math.max(0, zr.width - ir.width));
+            let y = clamp(ir.top - zr.top, 0, Math.max(0, zr.height - ir.height));
+            item.style.left = x + 'px';
+            item.style.top = y + 'px';
+          });
+        }, 150);
+      });
+    }
+  })();
+
+  /* ---------- case study: Mother & Child (visitor-supplied image) ---------- */
+  (function(){
+    const frame = document.getElementById('mcFrame');
+    if(!frame) return;
+    const img = document.getElementById('mcImg');
+    const hotspotsWrap = document.getElementById('mcHotspots');
+    const mcDots = hotspotsWrap ? hotspotsWrap.querySelectorAll('.mc-dot') : [];
+    const readoutWord = document.getElementById('mcReadoutWord');
+    const readoutText = document.getElementById('mcReadoutText');
+
+    // if a src has been added to #mcImg directly in the code, show it
+    // and hide the placeholder; otherwise leave the placeholder box up
+    if(img.getAttribute('src')){
+      img.style.display = 'block';
+      frame.classList.add('has-image');
+    }
+
+    const MC_DATA = {
+      ligature: {
+        label: 'Ampersand',
+        paragraphs: [
+          'The ampersand doesn\u2019t sit between the words as a neutral connector. It\u2019s redrawn to nest inside the bowl of the "C" that follows it, sharing a single stroke rather than standing beside it the way a stock "&" would.',
+          'The character has always been a ligature of its own, a fused "et," Latin for "and." Most designers treat that history as trivia. Lubalin treated it as license to keep reshaping the form.',
+          'What\u2019s left reads as one continuous line joining "Mother" to "Child," a held shape before your eye even registers it as punctuation. The idea that the two words share a single bond is carried by that one singular relationship.'
+        ]
+      },
+      kerning: {
+        label: 'Kerning',
+        paragraphs: [
+          'Kerning is the adjustment of space between two specific letters, tighter here than any 1965 type-setting convention allowed. This was hand work: phototype sliced and shifted on a light table, checked pair by pair until it stopped reading as two separate shapes.',
+          'The payoff is that the playful kerning "Mother" reads as one connected unit before it separates back into its own letters, doing with space the same work the concept needs the meaning to do.'
+        ]
+      },
+      terminal: {
+        label: 'Terminal',
+        paragraphs: [
+          'A terminal is simply where a stroke ends. Here the ampersand\u2019s terminal isn\u2019t just nudged closer to the "C" \u2014 its curve is hand-altered so the two strokes lock together as one continuous line.',
+          'That\u2019s what separates this from type merely set tight: kerning alone still leaves two intact letterforms standing close, while redrawing the terminal means the character no longer exists in its original shape. It\u2019s a small edit with a big consequence \u2014 the ampersand stops reading as two shapes and becomes one.'
+        ]
+      },
+      tone: {
+        label: 'Stress',
+        paragraphs: [
+          'The stress in the “O” creates visual impact by giving the letter a sense of movement and direction rather than making it feel static. The diagonal relationship between the thick and thin strokes adds contrast and draws the viewer’s eye toward the letter. This contributes to Lubalin’s expressive typographic style, making the “O” feel more dynamic and visually engaging within the composition.',
+                ]
+      },
+      nesting: {
+        label: 'Nesting',
+        paragraphs: [
+          'The "O" in "Mother" isn\u2019t a plain round letterform. It\u2019s redrawn into a closed ring, opened just enough to hold "& Child" set inside it, rather than beside the word the way a normal pairing would sit.',
+          'That single move carries the whole idea. A mother holding a child isn\u2019t illustrated anywhere in the mark, but an O literally enclosing "Child" reads the same way, without ever leaving typography to do it.'
+        ]
+      },
+      scale: {
+        label: 'Scale',
+        paragraphs: [
+          'The ampersand and "Child" sit noticeably smaller than the letters of "Mother" around them, well past what\u2019s needed just to fit inside the counter.',
+          'That size drop mirrors an actual relationship \u2014 a parent is bigger than a child \u2014 so the logotype can say it without a single illustrated figure.'
+        ]
+      },
+      bond: {
+        label: 'Proximity',
+        paragraphs: [
+          'Proximity and collision work as a pair of related techniques in the wordmark: proximity is simply pulling two letters closer than standard kerning allows, while collision goes a step further by actually reshaping a stroke or terminal so it merges into the neighboring letter, sharing a single line instead of standing beside it. you can see the milder version in how "Mother" is kerned tight overall, and the fuller version in the ampersand terminal fusing directly into the followingC. Both techniques serve the same underlying idea similar toletters bonding into a single held shape, echoing the mother-and-child concept.'
+        ]
+      },
+      serif: {
+        label: 'Serif',
+        paragraphs: [
+          'The letters are cut as a heavy serif, not a geometric sans face like most 1960s corporate marks \u2014 a choice that reads as handwritten, not engineered.',
+          'That warmth is what makes the surgery possible: a serif\u2019s weight can bend and rejoin without the letters losing their overall identity.'
+        ]
+      },
+      negativespace: {
+        label: 'Negative Space',
+        paragraphs: [
+          'Not every gap in the word got the tight, fused treatment. The counter between the "T" and the "H" is left open \u2014 wider, even, than plain phototype would have set it \u2014 so the eye gets a beat of rest before the ligature work starts again.',
+          'That contrast is the point where without an open pocket of air somewhere in the word, the tightness everywhere else would just read as cramped, not deliberate. The empty space is doing as much design work here as any inked stroke, giving the eye a place to land before the ampersand pulls it back in.',
+          'It\u2019s the same principle sculptors and architects call figure-ground \u2014 what\u2019s left unmarked shapes how the marked parts are read. Lubalin, trained to think in whole words rather than individual letters, treated that gap as a held breath in the middle of the sentence-as-logotype.'
+        ]
+      }
+    };
+
+    function buildParagraphs(list){
+      readoutText.innerHTML = '';
+      list.forEach(t=>{
+        const p = document.createElement('p');
+        p.textContent = t;
+        readoutText.appendChild(p);
+      });
+    }
+
+    // stretch the paragraph block to match the vertical word's exact
+    // rendered height, so the text runs from the word's first initial
+    // to its last with nothing left unfilled
+    function matchReadoutHeight(){
+      const h = readoutWord.getBoundingClientRect().height;
+      if(h > 0) readoutText.style.minHeight = h + 'px';
+    }
+
+    let mcCurrent = null;
+    function setMcKey(key){
+      const data = MC_DATA[key];
+      if(!data || key === mcCurrent) return;
+      mcCurrent = key;
+      mcDots.forEach(d=> d.classList.toggle('active', d.dataset.key===key));
+      readoutWord.style.opacity = 0;
+      readoutText.style.opacity = 0;
+      window.setTimeout(()=>{
+        readoutWord.textContent = data.label;
+        buildParagraphs(data.paragraphs);
+        requestAnimationFrame(matchReadoutHeight);
+        readoutWord.style.opacity = 1;
+        readoutText.style.opacity = 1;
+      }, 140);
+    }
+    // initialize readout with the first marker's data, no fade on load
+    (function initMc(){
+      const first = mcDots[0];
+      const data = first ? MC_DATA[first.dataset.key] : null;
+      if(data){
+        mcCurrent = first.dataset.key;
+        readoutWord.textContent = data.label;
+        buildParagraphs(data.paragraphs);
+        requestAnimationFrame(matchReadoutHeight);
+      }
+    })();
+    let mcResizeT;
+    window.addEventListener('resize', ()=>{
+      clearTimeout(mcResizeT);
+      mcResizeT = setTimeout(matchReadoutHeight, 120);
+    });
+
+    mcDots.forEach(d=>{
+      d.addEventListener('mouseenter', ()=> setMcKey(d.dataset.key));
+      d.addEventListener('focus', ()=> setMcKey(d.dataset.key));
+      d.addEventListener('click', (e)=>{ e.stopPropagation(); setMcKey(d.dataset.key); });
+    });
+  })();
+
+  /* ---------- logotype workshop ---------- */
+  const wlWordEl = document.getElementById('wlWord');
+  const wlInput = document.getElementById('wlInput');
+  const wlPanel = document.getElementById('wlPanel');
+  const wlSelectedChar = document.getElementById('wlSelectedChar');
+  const wlSelectedDesc = document.getElementById('wlSelectedDesc');
+  const wlSlant = document.getElementById('wlSlant');
+  const wlSpacing = document.getElementById('wlSpacing');
+  const wlWeightRow = document.getElementById('wlWeightRow');
+  const wlColorRow = document.getElementById('wlColorRow');
+  const wlRemix = document.getElementById('wlRemix');
+  const wlReset = document.getElementById('wlReset');
+  const wlPresetButtons = document.querySelectorAll('#wlPresets button');
+
+  const WL_COLORS = ['ink','lubred','teal'];
+  const WL_WEIGHTS = [400,700,900];
+  const WL_WEIGHT_NAMES = { 400:'Regular', 700:'Bold', 900:'Black' };
+
+  let wlLetters = [];
+  let wlSelected = 0;
+
+  // spacing: 0 = normal apart, 100 = fully fused into the next letter
+  function wlNewLetters(word){
+    return Array.from(word.toUpperCase()).map(ch=>({
+      char: ch, slant:0, weight:700, color:'ink', spacing:0
+    }));
+  }
+
+  function wlRenderStage(){
+    wlWordEl.innerHTML = '';
+    wlLetters.forEach((L, i)=>{
+      const span = document.createElement('span');
+      if(L.char === ' '){
+        span.className = 'wl-letter wl-space';
+        wlWordEl.appendChild(span);
+        return;
+      }
+      span.className = 'wl-letter' + (i === wlSelected ? ' selected' : '');
+      span.textContent = L.char;
+      span.style.color = 'var(--' + L.color + ')';
+      span.style.fontWeight = L.weight;
+      span.style.transform = 'skewX(' + (-L.slant) + 'deg)';
+      if(i > 0 && wlLetters[i-1]){
+        span.style.marginLeft = (-(wlLetters[i-1].spacing / 100) * 0.55) + 'em';
+      }
+      span.addEventListener('click', ()=> wlSelect(i));
+      wlWordEl.appendChild(span);
+    });
+  }
+
+  function wlDescribe(L, isLast){
+    const bits = [];
+    bits.push((L.slant === 0 ? 'No slant' : (L.slant > 0 ? L.slant + '° right lean' : Math.abs(L.slant) + '° left lean')));
+    bits.push(WL_WEIGHT_NAMES[L.weight]);
+    if(!isLast){
+      if(L.spacing <= 10) bits.push('apart');
+      else if(L.spacing <= 50) bits.push('close');
+      else if(L.spacing <= 85) bits.push('touching next');
+      else bits.push('fused to next');
+    }
+    return bits.join(' · ');
+  }
+
+  function wlRenderPanel(){
+    // skip past spaces if the selection lands on one
+    if(wlLetters[wlSelected] && wlLetters[wlSelected].char === ' '){
+      wlSelected = Math.min(wlSelected + 1, wlLetters.length - 1);
+    }
+    const L = wlLetters[wlSelected];
+    if(!L) return;
+    const isLast = wlSelected === wlLetters.length - 1;
+
+    wlSelectedChar.textContent = L.char;
+    wlSelectedDesc.textContent = wlDescribe(L, isLast);
+
+    wlSlant.value = L.slant;
+
+    wlSpacing.value = L.spacing;
+    wlSpacing.toggleAttribute('disabled', isLast);
+
+    Array.from(wlWeightRow.children).forEach(b=> b.classList.toggle('active', parseInt(b.dataset.weight,10) === L.weight));
+    Array.from(wlColorRow.children).forEach(b=> b.classList.toggle('active', b.dataset.color === L.color));
+  }
+
+  function wlSelect(i){
+    wlSelected = i;
+    wlRenderPanel();
+    wlRenderStage();
+  }
+
+  function wlRenderAll(){
+    wlRenderStage();
+    wlRenderPanel();
+  }
+
+  wlInput.addEventListener('input', ()=>{
+    wlPresetButtons.forEach(b=> b.classList.remove('active'));
+    wlLetters = wlNewLetters(wlInput.value || '');
+    wlSelected = 0;
+    wlRenderAll();
+  });
+
+  wlSlant.addEventListener('input', ()=>{
+    wlLetters[wlSelected].slant = parseInt(wlSlant.value, 10);
+    wlRenderAll();
+  });
+
+  wlSpacing.addEventListener('input', ()=>{
+    if(wlSpacing.hasAttribute('disabled')) return;
+    wlLetters[wlSelected].spacing = parseInt(wlSpacing.value, 10);
+    wlRenderAll();
+  });
+
+  wlWeightRow.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button');
+    if(!btn) return;
+    wlLetters[wlSelected].weight = parseInt(btn.dataset.weight, 10);
+    wlRenderAll();
+  });
+
+  wlColorRow.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button');
+    if(!btn) return;
+    wlLetters[wlSelected].color = btn.dataset.color;
+    wlRenderAll();
+  });
+
+  wlRemix.addEventListener('click', ()=>{
+    wlLetters.forEach((L, i)=>{
+      if(L.char === ' ') return;
+      L.slant = Math.round((Math.random() * 40) - 20);
+      L.weight = WL_WEIGHTS[Math.floor(Math.random() * WL_WEIGHTS.length)];
+      L.color = WL_COLORS[Math.floor(Math.random() * WL_COLORS.length)];
+      L.spacing = i < wlLetters.length - 1 ? Math.round(Math.random() * 100) : 0;
+    });
+    wlRenderAll();
+  });
+
+  wlReset.addEventListener('click', ()=>{
+    wlLetters.forEach(L=>{ L.slant = 0; L.weight = 700; L.color = 'ink'; L.spacing = 0; });
+    wlRenderAll();
+  });
+
+  const WL_STYLES = {
+    avantgarde: (letters)=> letters.forEach((L,i)=>{
+      L.spacing = i < letters.length - 1 ? 70 : 0; L.weight = 900; L.slant = 0;
+      L.color = (i % 2 === 0) ? 'lubred' : 'ink';
+    }),
+    families: (letters)=> letters.forEach((L,i)=>{
+      L.spacing = i < letters.length - 1 ? 55 : 0; L.weight = 900;
+      L.slant = (i % 2 === 0) ? 9 : -9;
+      L.color = 'ink';
+    }),
+    simple: (letters)=> letters.forEach((L,i)=>{
+      L.spacing = i < letters.length - 1 ? 20 : 0; L.weight = 700; L.slant = 0;
+      L.color = 'ink';
+    }),
+    eros: (letters)=> letters.forEach((L,i)=>{
+      L.spacing = i < letters.length - 1 ? 40 : 0; L.weight = 900;
+      L.slant = (i % 2 === 0) ? 18 : -18;
+      L.color = 'lubred';
+    })
+  };
+
+  wlPresetButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      wlPresetButtons.forEach(b=> b.classList.remove('active'));
+      btn.classList.add('active');
+      wlInput.value = btn.dataset.word;
+      wlLetters = wlNewLetters(btn.dataset.word);
+      const styleFn = WL_STYLES[btn.dataset.style];
+      if(styleFn) styleFn(wlLetters);
+      wlSelected = 0;
+      wlRenderAll();
+    });
+  });
+
+  // initial state
+  wlLetters = wlNewLetters(wlInput.value);
+  WL_STYLES.avantgarde(wlLetters);
+  wlRenderAll();
+
+  /* ---------- ending wall marquee content ----------
+     Three separate rows, each with its own 8 unique images, so
+     nothing repeats across the whole wall. Fill in "src" for each
+     card with your own image path. Leave src as '' on any card to
+     fall back to a plain placeholder label instead of a broken image.
+
+     Each row loops seamlessly (that's why fillRow renders the list
+     twice per row) — the repeat only shows up once per full scroll
+     cycle, never as two adjacent boxes, so it won't read as a
+     duplicate on screen.
+  ---------------------------------------------------------------- */
+  const wallRow1 = [
+    {label:'Avant Garde Cover', cls:'wide', src:'images/carousel/1.jpg'},
+    {label:'Families Logo', cls:'square', src:'images/carousel/2.jpg'},
+    {label:'Mother & Child', cls:'', src:'images/carousel/3.jpg'},
+    {label:'Eros Spread', cls:'wide', src:'images/carousel/4.jpg'},
+    {label:'Lubalin Graph', cls:'square', src:'images/carousel/5.jpg'},
+    {label:'Marriage Logo', cls:'', src:'images/carousel/6.jpg'},
+    {label:'ITC Ronda Specimen', cls:'wide', src:'images/carousel/7.jpg'},
+    {label:'Avant Garde Ligature', cls:'square', src:'images/carousel/8.jpg'}
+  ];
+  const wallRow2 = [
+    {label:'U&lc Masthead', cls:'wide', src:'images/carousel/9.jpg'},
+    {label:'Fact Magazine Cover', cls:'', src:'images/carousel/10.jpg'},
+    {label:'Genesis Trademark', cls:'square', src:'images/carousel/11.jpg'},
+    {label:'Ballantine Books Logo', cls:'', src:'images/carousel/12.jpg'},
+    {label:'CBS Records Sleeve', cls:'wide', src:'images/carousel/13.jpg'},
+    {label:'Descender Study', cls:'square', src:'images/carousel/14.jpg'},
+    {label:'Sudler & Hennessey Ad', cls:'wide', src:'images/carousel/15.jpg'},
+    {label:'Serif Gothic Specimen', cls:'square', src:'images/carousel/16.jpg'}
+  ];
+  const wallRow3 = [
+    {label:'Type Poster Study', cls:'wide', src:'images/carousel/17.jpg'},
+    {label:'Editorial Spread I', cls:'', src:'images/carousel/18.jpg'},
+    {label:'Editorial Spread II', cls:'square', src:'images/carousel/19.png'},
+    {label:'Logotype Study I', cls:'', src:'images/carousel/20.jpg'},
+    {label:'Logotype Study II', cls:'wide', src:'images/carousel/21.jpg'},
+    {label:'Hairline Specimen', cls:'square', src:'images/carousel/22.jpg'},
+    {label:'Avant Garde Poster', cls:'wide', src:'images/carousel/23.jpg'},
+    {label:'Closing Wordmark', cls:'square', src:'images/carousel/24.jpg'}
+  ];
+  function fillRow(id, items){
+    const row = document.getElementById(id);
+    let html = '';
+    for(let i=0;i<2;i++){
+      items.forEach(({label,cls,src})=>{
+        const inner = src
+          ? '<img src="'+src+'" alt="'+label+'">'
+          : '<span><!-- '+label+' --></span>';
+        html += '<div class="wall-card '+cls+'">'+inner+'</div>';
+      });
+    }
+    row.innerHTML = html;
+  }
+  fillRow('row1', wallRow1);
+  fillRow('row2', wallRow2);
+  fillRow('row3', wallRow3);
+
+})();
+</script>
+</body>
+</html>
